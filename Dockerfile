@@ -55,4 +55,6 @@ RUN npm install -g node-sass --unsafe-perm --force
 RUN npm install -g svgexport --unsafe-perm --force
 RUN apt install -y webp
 
+# Firebase
+RUN npm install -g firebase-tools
 
