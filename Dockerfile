@@ -57,4 +57,6 @@ RUN apt install -y webp
 
 # Firebase
 RUN npm install -g firebase-tools
+ADD firebase.bash /usr/bin
+RUN chmod +x /usr/bin/firebase.bash
 
