@@ -18,6 +18,8 @@ ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
     LANGUAGE=C.UTF-8
 
+RUN mkdir -pv /usr/share/man/
+
 # Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y 
 ENV PATH="/root/.cargo/bin:/root/.local/bin:$PATH"
