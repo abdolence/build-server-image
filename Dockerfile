@@ -3,7 +3,6 @@ RUN apt-get update && apt-get install -y \
 	curl gcc g++ make libssl-dev pkg-config locales rubygems ruby-dev git git-lfs wget \
 	apt-transport-https ca-certificates gnupg-agent software-properties-common java-common
 
-
 # Fonts (for converting SVGs mostly)
 RUN apt-get install -y libfontconfig sed \
 	fonts-roboto* fonts-cantarell fonts-lato* fonts-ubuntu* \	
@@ -28,7 +27,6 @@ ENV PATH="/root/.cargo/bin:/root/.local/bin:$PATH"
 RUN curl https://apt.corretto.aws/corretto.key | apt-key add -
 RUN add-apt-repository 'deb https://apt.corretto.aws stable main'
 RUN apt-get update && apt-get install -y java-1.8.0-amazon-corretto-jdk
-
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-amazon-corretto
 
