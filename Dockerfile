@@ -1,4 +1,5 @@
 FROM debian:stable-slim
+
 RUN apt-get update && apt-get install -y \
 	curl gcc g++ make libssl-dev pkg-config locales rubygems ruby-dev git git-lfs wget \
 	apt-transport-https ca-certificates gnupg-agent software-properties-common java-common
