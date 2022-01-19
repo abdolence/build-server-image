@@ -62,3 +62,8 @@ RUN chmod +x /usr/bin/firebase.bash
 
 # ICU
 RUN apt-get install libicu-dev liblapack-dev liblapacke-dev -y
+
+# Terraform
+RUN curl -sL "https://apt.releases.hashicorp.com/gpg" | apt-key add && \ 
+    apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
+    apt-get update && apt-get install terraform
