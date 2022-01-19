@@ -61,4 +61,4 @@ ADD firebase.bash /usr/bin
 RUN chmod +x /usr/bin/firebase.bash
 
 # ICU
-RUN apt-get install libicu-dev -y
+RUN apt-get install libicu-dev liblapack-dev -y
