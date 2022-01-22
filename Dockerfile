@@ -66,4 +66,10 @@ RUN apt-get install libicu-dev liblapack-dev liblapacke-dev -y
 # Terraform
 RUN curl -sL "https://apt.releases.hashicorp.com/gpg" | apt-key add && \ 
     apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
-    apt-get update && apt-get install terraform
+    apt-get update && apt-get install terraform -y
+
+# Google GCS FUSE
+RUN curl -sL "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key add && \ 
+    apt-add-repository "deb http://packages.cloud.google.com/apt gcsfuse-jessie main" && \
+    apt-get update && apt-get install gcsfuse -y
+
