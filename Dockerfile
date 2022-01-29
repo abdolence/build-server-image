@@ -73,3 +73,6 @@ RUN curl -sL "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key a
     apt-add-repository "deb http://packages.cloud.google.com/apt gcsfuse-jessie main" && \
     apt-get update && apt-get install gcsfuse -y
 
+# Cargo chef
+RUN cargo install cargo-chef
+
