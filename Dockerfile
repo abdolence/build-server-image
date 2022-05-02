@@ -75,4 +75,5 @@ RUN curl -sL "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key a
 
 # Cargo chef
 RUN cargo install cargo-chef
-
+RUN cargo install cargo-audit
+RUN cargo install refinery_cli
