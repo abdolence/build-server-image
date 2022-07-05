@@ -3,7 +3,7 @@ FROM debian:stable-slim
 RUN apt-get update && apt-get install -y \
 	curl gcc g++ make libssl-dev pkg-config locales rubygems ruby-dev git git-lfs wget \
 	apt-transport-https ca-certificates gnupg-agent software-properties-common java-common \
-	libclang-dev libsqlite3-dev libopenblas-dev libyajl-dev libicu-dev liblapack-dev liblapacke-dev
+	libclang-dev libsqlite3-dev libopenblas-dev libyajl-dev libicu-dev liblapack-dev liblapacke-dev cmake
 
 # Fonts (for converting SVGs mostly)
 RUN apt-get install -y libfontconfig sed \
