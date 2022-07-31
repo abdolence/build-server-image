@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
 
 # Fonts (for converting SVGs mostly)
 RUN apt-get install -y libfontconfig sed \
-	fonts-roboto* fonts-cantarell fonts-lato* fonts-ubuntu* \	
+	fonts-roboto* fonts-cantarell fonts-lato* fonts-ubuntu* \
 	lmodern ttf-aenigma ttf-bitstream-vera ttf-sjfonts tv-fonts
 
 # Locales
