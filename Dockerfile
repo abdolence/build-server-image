@@ -3,7 +3,7 @@ FROM debian:stable-slim
 RUN apt-get update && apt-get install -y \
 	curl gcc g++ make libssl-dev pkg-config locales rubygems ruby-dev git git-lfs wget \
 	apt-transport-https ca-certificates gnupg-agent software-properties-common java-common \
-	libclang-dev libsqlite3-dev libopenblas-dev libyajl-dev libicu-dev liblapack-dev liblapacke-dev cmake
+	libclang-dev libsqlite3-dev libopenblas-dev libyajl-dev libicu-dev liblapack-dev liblapacke-dev cmake unzip
 
 # Fonts (for converting SVGs mostly)
 RUN apt-get install -y libfontconfig sed \
@@ -75,3 +75,8 @@ RUN curl -sL "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key a
 RUN cargo install cargo-chef
 RUN cargo install cargo-audit
 RUN cargo install refinery_cli
+
+# Google Protobuf
+RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v21.4/protoc-21.4-linux-x86_64.zip && unzip protoc-21.4-linux-x86_64.zip -d /usr/local
+
+ENV PROTOC /usr/local/bin/protoc
