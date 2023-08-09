@@ -7,8 +7,8 @@ RUN apt-get update && apt-get install -y \
 
 # Fonts (for converting SVGs mostly)
 RUN apt-get install -y libfontconfig sed \
-	fonts-roboto* fonts-cantarell fonts-lato* fonts-ubuntu* \
-	lmodern ttf-aenigma ttf-bitstream-vera ttf-sjfonts tv-fonts
+	fonts-roboto* fonts-cantarell fonts-lato* fonts-ubuntu* fonts-aenigma-* \
+	lmodern ttf-bitstream-vera ttf-sjfonts tv-fonts
 
 # Locales
 RUN locale-gen en_US.UTF-8
@@ -26,8 +26,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:/root/.local/bin:$PATH"
 
 # Java
-RUN curl https://apt.corretto.aws/corretto.key | apt-key add -
-RUN add-apt-repository 'deb https://apt.corretto.aws stable main'
+RUN curl https://apt.corretto.aws/corretto.key | gpg --dearmor | dd of=/usr/share/keyrings/corretto.gpg && echo "deb [signed-by=/usr/share/keyrings/corretto.gpg] https://apt.corretto.aws stable main" > /etc/apt/sources.list.d/corretto.list
 RUN apt-get update && apt-get install -y java-11-amazon-corretto-jdk
 
 ENV JAVA_HOME /usr/lib/jvm/java-11-amazon-corretto
@@ -40,7 +39,7 @@ RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/ap
     apt-get install sbt
 
 # NodeJS PPA
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get install -y nodejs && npm install npm -g
 
 # Workbox
@@ -71,12 +70,12 @@ RUN curl -sL "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key a
     apt-add-repository "deb http://packages.cloud.google.com/apt gcsfuse-jessie main" && \
     apt-get update && apt-get install gcsfuse -y
 
+# Google Protobuf
+RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v24.0/protoc-24.0-linux-x86_64.zip && unzip protoc-24.0-linux-x86_64.zip -d /usr/local
+
+ENV PROTOC /usr/local/bin/protoc
+
 # Cargo chef
 RUN cargo install cargo-chef
 RUN cargo install cargo-audit
 RUN cargo install refinery_cli
-
-# Google Protobuf
-RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v21.4/protoc-21.4-linux-x86_64.zip && unzip protoc-21.4-linux-x86_64.zip -d /usr/local
-
-ENV PROTOC /usr/local/bin/protoc
