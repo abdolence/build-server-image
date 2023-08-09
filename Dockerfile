@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:11-slim
 
 RUN apt-get update && apt-get install -y \
 	curl gcc g++ make libssl-dev pkg-config locales rubygems ruby-dev git git-lfs wget \
@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
 
 # Fonts (for converting SVGs mostly)
 RUN apt-get install -y libfontconfig sed \
-	fonts-roboto* fonts-cantarell fonts-lato* fonts-ubuntu* fonts-aenigma-* \
+	fonts-roboto* fonts-cantarell fonts-lato* fonts-ubuntu* \
 	lmodern ttf-bitstream-vera ttf-sjfonts tv-fonts
 
 # Locales
@@ -21,9 +21,6 @@ ENV LANG=C.UTF-8 \
 
 RUN mkdir -pv /usr/share/man/man1
 
-# Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y 
-ENV PATH="/root/.cargo/bin:/root/.local/bin:$PATH"
 
 # Java
 RUN curl https://apt.corretto.aws/corretto.key | gpg --dearmor | dd of=/usr/share/keyrings/corretto.gpg && echo "deb [signed-by=/usr/share/keyrings/corretto.gpg] https://apt.corretto.aws stable main" > /etc/apt/sources.list.d/corretto.list
@@ -75,7 +72,11 @@ RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v24.0/pro
 
 ENV PROTOC /usr/local/bin/protoc
 
-# Cargo chef
+# Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y 
+ENV PATH="/root/.cargo/bin:/root/.local/bin:$PATH"
+
+# Cargo tools
 RUN cargo install cargo-chef
 RUN cargo install cargo-audit
 RUN cargo install refinery_cli
