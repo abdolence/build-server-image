@@ -1,4 +1,4 @@
-FROM debian:11-slim
+FROM debian:12-slim
 
 RUN apt-get update && apt-get install -y \
 	curl gcc g++ make libssl-dev pkg-config locales rubygems ruby-dev git git-lfs wget \
@@ -24,9 +24,9 @@ RUN mkdir -pv /usr/share/man/man1
 
 # Java
 RUN curl https://apt.corretto.aws/corretto.key | gpg --dearmor | dd of=/usr/share/keyrings/corretto.gpg && echo "deb [signed-by=/usr/share/keyrings/corretto.gpg] https://apt.corretto.aws stable main" > /etc/apt/sources.list.d/corretto.list
-RUN apt-get update && apt-get install -y java-11-amazon-corretto-jdk
+RUN apt-get update && apt-get install -y java-17-amazon-corretto-jdk
 
-ENV JAVA_HOME /usr/lib/jvm/java-11-amazon-corretto
+ENV JAVA_HOME /usr/lib/jvm/java-17-amazon-corretto
 
 # SBT
 RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
@@ -36,20 +36,13 @@ RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/ap
     apt-get install sbt
 
 # NodeJS PPA
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_24.x | bash -
 RUN apt-get install -y nodejs && npm install npm -g
-
-# Workbox
-RUN npm install workbox-cli --global
 
 # Yarn
 RUN npm install -g yarn
 
-# SASS
-RUN npm install -g node-sass --unsafe-perm --force
-
 # Image converting tools
-RUN npm install -g svgexport --unsafe-perm --force
 RUN apt install -y webp
 
 # Firebase
@@ -68,7 +61,7 @@ RUN curl -sL "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key a
     apt-get update && apt-get install gcsfuse -y
 
 # Google Protobuf
-RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v24.0/protoc-24.0-linux-x86_64.zip && unzip protoc-24.0-linux-x86_64.zip -d /usr/local
+RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v25.9/protoc-25.9-linux-x86_64.zip && unzip protoc-25.9-linux-x86_64.zip -d /usr/local
 
 ENV PROTOC /usr/local/bin/protoc
 
