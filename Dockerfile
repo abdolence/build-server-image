@@ -1,8 +1,8 @@
-FROM debian:12-slim
+FROM debian:13-slim
 
 RUN apt-get update && apt-get install -y \
 	curl gcc g++ make libssl-dev pkg-config locales rubygems ruby-dev git git-lfs wget \
-	apt-transport-https ca-certificates gnupg-agent software-properties-common java-common \
+	apt-transport-https ca-certificates gnupg-agent java-common \
 	libclang-dev libsqlite3-dev libopenblas-dev libyajl-dev libicu-dev liblapack-dev liblapacke-dev cmake unzip
 
 # Fonts (for converting SVGs mostly)
@@ -23,17 +23,17 @@ RUN mkdir -pv /usr/share/man/man1
 
 
 # Java
-RUN curl https://apt.corretto.aws/corretto.key | gpg --dearmor | dd of=/usr/share/keyrings/corretto.gpg && echo "deb [signed-by=/usr/share/keyrings/corretto.gpg] https://apt.corretto.aws stable main" > /etc/apt/sources.list.d/corretto.list
-RUN apt-get update && apt-get install -y java-17-amazon-corretto-jdk
+RUN curl -fsSL https://apt.corretto.aws/corretto.key | gpg --dearmor -o /usr/share/keyrings/corretto.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/corretto.gpg] https://apt.corretto.aws stable main" > /etc/apt/sources.list.d/corretto.list
+RUN apt-get update && apt-get install -y java-25-amazon-corretto-jdk
 
-ENV JAVA_HOME /usr/lib/jvm/java-17-amazon-corretto
+ENV JAVA_HOME /usr/lib/jvm/java-25-amazon-corretto
 
 # SBT
-RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
-    echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list && \
-    curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add && \ 
+RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | gpg --dearmor -o /usr/share/keyrings/scalasbt.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/scalasbt.gpg] https://repo.scala-sbt.org/scalasbt/debian all main" > /etc/apt/sources.list.d/sbt.list && \
     apt-get update && \
-    apt-get install sbt
+    apt-get install -y sbt
 
 # NodeJS PPA
 RUN curl -sL https://deb.nodesource.com/setup_24.x | bash -
@@ -43,7 +43,7 @@ RUN apt-get install -y nodejs && npm install npm -g
 RUN npm install -g yarn
 
 # Image converting tools
-RUN apt install -y webp
+RUN apt-get install -y webp
 
 # Firebase
 RUN npm install -g firebase-tools
@@ -51,17 +51,17 @@ ADD firebase.bash /usr/bin
 RUN chmod +x /usr/bin/firebase.bash
 
 # Terraform
-RUN curl -sL "https://apt.releases.hashicorp.com/gpg" | apt-key add && \ 
-    apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" && \
-    apt-get update && apt-get install terraform -y
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com trixie main" > /etc/apt/sources.list.d/hashicorp.list && \
+    apt-get update && apt-get install -y terraform
 
 # Google GCS FUSE
-RUN curl -sL "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | apt-key add && \ 
-    apt-add-repository "deb http://packages.cloud.google.com/apt gcsfuse-jessie main" && \
-    apt-get update && apt-get install gcsfuse -y
+RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt gcsfuse-trixie main" > /etc/apt/sources.list.d/gcsfuse.list && \
+    apt-get update && apt-get install -y gcsfuse
 
 # Google Protobuf
-RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v25.9/protoc-25.9-linux-x86_64.zip && unzip protoc-25.9-linux-x86_64.zip -d /usr/local
+RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v36.1/protoc-36.1-linux-x86_64.zip && unzip protoc-36.1-linux-x86_64.zip -d /usr/local && rm protoc-36.1-linux-x86_64.zip
 
 ENV PROTOC /usr/local/bin/protoc
 
